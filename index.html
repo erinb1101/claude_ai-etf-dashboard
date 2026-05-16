@@ -417,9 +417,253 @@
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
+  /* AI BOOM INDEX */
+  .ai-index-section {
+    margin-bottom: 32px;
+  }
+
+  .ai-index-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .ai-stock-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .ai-stock-card:hover { transform: translateY(-2px); border-color: rgba(88,166,255,0.3); }
+
+  .ai-stock-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #58a6ff, #bc8cff);
+  }
+
+  .ai-stock-ticker {
+    font-family: 'Space Mono', monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--blue);
+    margin-bottom: 2px;
+  }
+
+  .ai-stock-name {
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .ai-stock-price {
+    font-family: 'Space Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .ai-stock-change {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  /* CAPEX SECTION */
+  .capex-section {
+    margin-bottom: 32px;
+  }
+
+  .capex-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .capex-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .capex-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .capex-msft::before { background: #00a4ef; }
+  .capex-googl::before { background: #34a853; }
+  .capex-meta::before  { background: #0082fb; }
+  .capex-amzn::before  { background: #ff9900; }
+
+  .capex-company {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .capex-ticker-label {
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .capex-annual {
+    font-family: 'Space Mono', monospace;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .capex-annual-label {
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .capex-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+
+  .capex-quarters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .capex-q {
+    background: var(--surface2);
+    border-radius: 4px;
+    padding: 7px 9px;
+  }
+
+  .capex-q-label {
+    font-size: 9px;
+    color: var(--muted);
+    margin-bottom: 3px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .capex-q-val {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .capex-q-type {
+    font-size: 8px;
+    margin-top: 2px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .capex-yoy {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    background: rgba(63,185,80,0.08);
+    border: 1px solid rgba(63,185,80,0.2);
+    border-radius: 4px;
+  }
+
+  .capex-yoy-label { font-size: 10px; color: var(--muted); }
+  .capex-yoy-val { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--green); font-weight: 700; margin-left: auto; }
+
+  .capex-note {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  .capex-total-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .capex-total-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .capex-total-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--amber);
+    white-space: nowrap;
+  }
+
+  .capex-progress-wrap {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .capex-progress-track {
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .capex-progress-seg { height: 100%; transition: width 0.6s ease; }
+
+  .capex-legend {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+
+  .capex-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .capex-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
   @media (max-width: 900px) {
     .chart-section { grid-template-columns: 1fr; }
     .bottom-row { grid-template-columns: 1fr; }
+    .ai-index-grid { grid-template-columns: repeat(2, 1fr); }
+    .capex-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 500px) {
+    .ai-index-grid { grid-template-columns: 1fr 1fr; }
+    .capex-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -478,6 +722,190 @@
 
   <!-- ERROR MSG -->
   <div class="error-msg" id="errorMsg">⚠ 실시간 데이터를 가져오지 못했습니다. 프록시 한도 초과 가능. 샘플 데이터로 표시 중.</div>
+
+  <!-- AI BOOM INDEX -->
+  <div class="ai-index-section">
+    <div class="section-title">// AI BOOM INDEX — 빅테크 주가 (실시간)</div>
+    <div class="ai-index-grid" id="aiIndexGrid"></div>
+  </div>
+
+  <!-- CAPEX GUIDANCE -->
+  <div class="capex-section">
+    <div class="section-title">// HYPERSCALER CAPEX GUIDANCE — 분기별 실적 기준 (수동 업데이트)</div>
+    <div class="capex-grid">
+
+      <!-- MICROSOFT -->
+      <div class="capex-card capex-msft">
+        <div class="capex-company" style="color:#00a4ef">Microsoft</div>
+        <div class="capex-ticker-label">MSFT · Azure / AI</div>
+        <div class="capex-annual">$190B</div>
+        <div class="capex-annual-label">CY2026 전체 연간 가이던스</div>
+        <hr class="capex-divider">
+        <div class="capex-quarters">
+          <div class="capex-q">
+            <div class="capex-q-label">Q1 FY26 (Sep'25)</div>
+            <div class="capex-q-val">$20.0B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q2 FY26 (Dec'25)</div>
+            <div class="capex-q-val">$22.6B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q3 FY26 (Mar'26)</div>
+            <div class="capex-q-val">$30.9B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q4 FY26 (Jun'26)</div>
+            <div class="capex-q-val">~$35B+</div>
+            <div class="capex-q-type" style="color:var(--amber)">◐ 예상</div>
+          </div>
+        </div>
+        <div class="capex-yoy">
+          <span class="capex-yoy-label">YoY 증가율</span>
+          <span class="capex-yoy-val">+74% ↑</span>
+        </div>
+        <div class="capex-note">Azure AI 수요 초과, capacity-constrained 지속. CFO Amy Hood "FY26 성장률 FY25 상회" 발언.</div>
+      </div>
+
+      <!-- GOOGLE -->
+      <div class="capex-card capex-googl">
+        <div class="capex-company" style="color:#34a853">Alphabet</div>
+        <div class="capex-ticker-label">GOOGL · Google Cloud / TPU</div>
+        <div class="capex-annual">$180–190B</div>
+        <div class="capex-annual-label">CY2026 전체 연간 가이던스</div>
+        <hr class="capex-divider">
+        <div class="capex-quarters">
+          <div class="capex-q">
+            <div class="capex-q-label">Q3 2025</div>
+            <div class="capex-q-val">$13.1B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q4 2025</div>
+            <div class="capex-q-val">$14.3B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q1 2026</div>
+            <div class="capex-q-val">$17.2B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q2 2026</div>
+            <div class="capex-q-val">~$17–19B</div>
+            <div class="capex-q-type" style="color:var(--amber)">◐ 예상</div>
+          </div>
+        </div>
+        <div class="capex-yoy">
+          <span class="capex-yoy-label">YoY 증가율</span>
+          <span class="capex-yoy-val">+71% ↑</span>
+        </div>
+        <div class="capex-note">Google Cloud Q1'26 매출 +63% YoY ($20B). Cloud backlog $460B로 전분기 대비 2배. 가이던스 $5B 상향.</div>
+      </div>
+
+      <!-- META -->
+      <div class="capex-card capex-meta">
+        <div class="capex-company" style="color:#0082fb">Meta</div>
+        <div class="capex-ticker-label">META · Llama / AI Infra</div>
+        <div class="capex-annual">$125–145B</div>
+        <div class="capex-annual-label">CY2026 전체 연간 가이던스</div>
+        <hr class="capex-divider">
+        <div class="capex-quarters">
+          <div class="capex-q">
+            <div class="capex-q-label">Q3 2025</div>
+            <div class="capex-q-val">$15.2B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q4 2025</div>
+            <div class="capex-q-val">$22.1B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q1 2026</div>
+            <div class="capex-q-val">$19.8B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q2 2026</div>
+            <div class="capex-q-val">~$25–30B</div>
+            <div class="capex-q-type" style="color:var(--amber)">◐ 예상</div>
+          </div>
+        </div>
+        <div class="capex-yoy">
+          <span class="capex-yoy-label">YoY 증가율</span>
+          <span class="capex-yoy-val">+76% ↑</span>
+        </div>
+        <div class="capex-note">가이던스 $115-135B → $125-145B로 상향. 부품 가격 상승 + Ohio 1GW 데이터센터 착공. Meta Superintelligence Labs 설립.</div>
+      </div>
+
+      <!-- AMAZON -->
+      <div class="capex-card capex-amzn">
+        <div class="capex-company" style="color:#ff9900">Amazon</div>
+        <div class="capex-ticker-label">AMZN · AWS / Trainium</div>
+        <div class="capex-annual">~$200B</div>
+        <div class="capex-annual-label">CY2026 전체 연간 가이던스</div>
+        <hr class="capex-divider">
+        <div class="capex-quarters">
+          <div class="capex-q">
+            <div class="capex-q-label">Q3 2025</div>
+            <div class="capex-q-val">$22.6B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q4 2025</div>
+            <div class="capex-q-val">$26.3B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q1 2026</div>
+            <div class="capex-q-val">$44.2B</div>
+            <div class="capex-q-type" style="color:var(--green)">● 실적</div>
+          </div>
+          <div class="capex-q">
+            <div class="capex-q-label">Q2 2026</div>
+            <div class="capex-q-val">~$45–50B</div>
+            <div class="capex-q-type" style="color:var(--amber)">◐ 예상</div>
+          </div>
+        </div>
+        <div class="capex-yoy">
+          <span class="capex-yoy-label">YoY 증가율</span>
+          <span class="capex-yoy-val">+107% ↑</span>
+        </div>
+        <div class="capex-note">Q1'26 CapEx +107% YoY로 4사 중 최대 증가. Andy Jassy "$200B 집행 예정". AWS 수요 초과로 FCF 95% 급감.</div>
+      </div>
+
+    </div>
+
+    <!-- 합계 바 -->
+    <div class="capex-total-bar">
+      <div>
+        <div class="capex-total-label">// 4사 합계 CY2026 가이던스</div>
+        <div class="capex-total-num">$725B+</div>
+      </div>
+      <div class="capex-progress-wrap">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace">비중</span>
+          <span style="font-size:9px;color:var(--muted);font-family:'Space Mono',monospace">vs 2025: $410B → 2026: $725B (+77%)</span>
+        </div>
+        <div class="capex-progress-track">
+          <div class="capex-progress-seg" style="width:26%;background:#ff9900cc"></div>
+          <div class="capex-progress-seg" style="width:26%;background:#00a4efcc"></div>
+          <div class="capex-progress-seg" style="width:26%;background:#34a853cc"></div>
+          <div class="capex-progress-seg" style="width:19%;background:#0082fbcc"></div>
+        </div>
+      </div>
+      <div class="capex-legend">
+        <div class="capex-legend-item"><div class="capex-legend-dot" style="background:#ff9900"></div>AMZN ~$200B</div>
+        <div class="capex-legend-item"><div class="capex-legend-dot" style="background:#00a4ef"></div>MSFT ~$190B</div>
+        <div class="capex-legend-item"><div class="capex-legend-dot" style="background:#34a853"></div>GOOGL ~$190B</div>
+        <div class="capex-legend-item"><div class="capex-legend-dot" style="background:#0082fb"></div>META ~$145B</div>
+      </div>
+    </div>
+  </div>
 
   <!-- ETF CARDS -->
   <div class="section-title">// SECTOR ETF WATCHLIST</div>
@@ -568,7 +996,43 @@ const SAMPLE = {
   ETN:  { price:318.90, change:-1.50, pct:-0.47, high:321.00, low:317.00, vol:'2.1M',  ytd:7.4  },
 };
 
-let liveData = {};
+// ──────────────────────────────
+// AI BOOM INDEX — 빅테크 주가
+// ──────────────────────────────
+const AI_STOCKS = [
+  { ticker:'NVDA', name:'NVIDIA — AI Compute', role:'GPU 수요 바로미터' },
+  { ticker:'MSFT', name:'Microsoft — Azure AI', role:'Cloud CapEx 1위' },
+  { ticker:'GOOGL',name:'Alphabet — Google Cloud', role:'TPU + Gemini' },
+  { ticker:'META', name:'Meta — AI Infra', role:'CapEx 가장 공격적' },
+];
+
+const AI_STOCK_SAMPLE = {
+  NVDA:  { price:1065.20, change:28.40, pct:2.74,  ytd:82.1 },
+  MSFT:  { price:415.30,  change:-2.10, pct:-0.50, ytd:8.3  },
+  GOOGL: { price:178.50,  change:3.80,  pct:2.18,  ytd:14.2 },
+  META:  { price:582.40,  change:8.90,  pct:1.55,  ytd:31.5 },
+};
+
+function renderAIIndex(data) {
+  const grid = document.getElementById('aiIndexGrid');
+  grid.innerHTML = AI_STOCKS.map(s => {
+    const d = data[s.ticker] || AI_STOCK_SAMPLE[s.ticker];
+    const up = d.pct >= 0;
+    return `
+    <div class="ai-stock-card">
+      <div class="ai-stock-ticker">${s.ticker}</div>
+      <div class="ai-stock-name">${s.role}</div>
+      <div class="ai-stock-price">$${d.price.toFixed(2)}</div>
+      <div class="ai-stock-change ${up?'up':'down'}">${up?'+':''}${d.change.toFixed(2)} (${up?'+':''}${d.pct.toFixed(2)}%)</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:10px;color:var(--muted)">YTD</span>
+        <span style="font-family:'Space Mono',monospace;font-size:11px;color:${d.ytd>=0?'var(--green)':'var(--red)'}">${d.ytd>=0?'+':''}${d.ytd}%</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+
 let usingSample = false;
 let perfChart = null;
 let barChart = null;
@@ -841,7 +1305,7 @@ async function loadAll() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spinning');
 
-  // Try live fetch
+  // ETF 실시간 데이터
   const results = {};
   let anyFailed = false;
   await Promise.allSettled(
@@ -855,6 +1319,19 @@ async function loadAll() {
     })
   );
 
+  // AI Boom Index 실시간 데이터
+  const aiResults = {};
+  await Promise.allSettled(
+    AI_STOCKS.map(async s => {
+      try {
+        aiResults[s.ticker] = await fetchQuote(s.ticker);
+      } catch {
+        anyFailed = true;
+        aiResults[s.ticker] = AI_STOCK_SAMPLE[s.ticker];
+      }
+    })
+  );
+
   if (anyFailed) {
     document.getElementById('errorMsg').style.display = 'block';
   } else {
@@ -862,6 +1339,7 @@ async function loadAll() {
   }
 
   liveData = results;
+  renderAIIndex(aiResults);
   renderCards(results);
   renderMetrics(results);
   renderSignals(results);
@@ -878,7 +1356,7 @@ async function loadAll() {
 // Init
 loadAll();
 // Auto-refresh every 60s
-//setInterval(loadAll, 60000);
+setInterval(loadAll, 60000);
 </script>
 </body>
 </html>
