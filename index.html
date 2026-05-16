@@ -654,6 +654,53 @@
 
   .capex-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
 
+  /* CHART TICKER TOGGLES */
+  .ticker-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .ticker-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px 3px 6px;
+    border-radius: 20px;
+    border: 1px solid;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    transition: opacity 0.15s, transform 0.15s;
+    user-select: none;
+  }
+
+  .ticker-toggle:hover { transform: translateY(-1px); }
+
+  .ticker-toggle.off {
+    opacity: 0.3;
+    filter: grayscale(1);
+  }
+
+  .toggle-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .toggle-group-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-top: 8px;
+    margin-bottom: 2px;
+    width: 100%;
+  }
+
   @media (max-width: 900px) {
     .chart-section { grid-template-columns: 1fr; }
     .bottom-row { grid-template-columns: 1fr; }
@@ -924,6 +971,8 @@
         </div>
       </div>
       <div class="chart-wrap"><canvas id="perfChart"></canvas></div>
+      <!-- TICKER TOGGLES -->
+      <div class="ticker-toggles" id="tickerToggles"></div>
     </div>
     <div class="chart-card">
       <div class="chart-title">// YTD RETURN BY SECTOR</div>
@@ -1161,14 +1210,74 @@ function renderSignals(data) {
 }
 
 // ──────────────────────────────
-// PERFORMANCE CHART
+// PERFORMANCE CHART — 토글 시스템
 // ──────────────────────────────
-const CHART_TICKERS = ['SMH','XLU','PAVE','COPX','VRT'];
-const CHART_COLORS  = ['#58a6ff','#f0883e','#3fb950','#d29922','#bc8cff'];
+
+// 모든 추적 가능한 종목 (ETF + 빅테크)
+const ALL_CHART_ITEMS = [
+  // ETF 섹터
+  { ticker:'SMH',   color:'#58a6ff', group:'반도체',   on:true  },
+  { ticker:'SOXX',  color:'#3d8fe0', group:'반도체',   on:false },
+  { ticker:'XLU',   color:'#f0883e', group:'전력',     on:true  },
+  { ticker:'GRID',  color:'#e06b20', group:'전력',     on:false },
+  { ticker:'PAVE',  color:'#3fb950', group:'건설',     on:true  },
+  { ticker:'COPX',  color:'#d29922', group:'구리',     on:true  },
+  { ticker:'CPER',  color:'#b07d10', group:'구리',     on:false },
+  { ticker:'VRT',   color:'#bc8cff', group:'냉각',     on:false },
+  { ticker:'ETN',   color:'#9d6fe0', group:'냉각',     on:false },
+  // AI Boom Index
+  { ticker:'NVDA',  color:'#76b900', group:'AI Index', on:true  },
+  { ticker:'MSFT',  color:'#00a4ef', group:'AI Index', on:false },
+  { ticker:'GOOGL', color:'#34a853', group:'AI Index', on:false },
+  { ticker:'META',  color:'#0082fb', group:'AI Index', on:false },
+];
+
+// 히스토리 캐시 (period별로 저장)
+const historyCache = {};
+
+function getCacheKey(ticker, period) { return `${ticker}__${period}`; }
+
+function buildToggleUI() {
+  const wrap = document.getElementById('tickerToggles');
+  const groups = [...new Set(ALL_CHART_ITEMS.map(i => i.group))];
+
+  wrap.innerHTML = groups.map(g => {
+    const items = ALL_CHART_ITEMS.filter(i => i.group === g);
+    return `
+      <span class="toggle-group-label">${g}</span>
+      ${items.map(item => `
+        <div class="ticker-toggle ${item.on ? '' : 'off'}"
+             id="toggle-${item.ticker}"
+             style="border-color:${item.color}55;background:${item.on ? item.color+'18' : 'transparent'};color:${item.color}"
+             onclick="toggleTicker('${item.ticker}')">
+          <div class="toggle-dot" style="background:${item.color}"></div>
+          ${item.ticker}
+        </div>`).join('')}`;
+  }).join('');
+}
+
+function toggleTicker(ticker) {
+  const item = ALL_CHART_ITEMS.find(i => i.ticker === ticker);
+  if (!item) return;
+  item.on = !item.on;
+
+  const el = document.getElementById(`toggle-${ticker}`);
+  if (item.on) {
+    el.classList.remove('off');
+    el.style.background = item.color + '18';
+  } else {
+    el.classList.add('off');
+    el.style.background = 'transparent';
+  }
+
+  // 차트만 다시 그리기 (데이터 재fetch 없이 캐시 사용)
+  renderPerfChartFromCache(currentPeriod);
+}
 
 function generateFallbackHistory(period, ticker) {
-  const base = SAMPLE[ticker]?.price ?? 100;
-  const ytd  = (SAMPLE[ticker]?.ytd ?? 5) / 100;
+  const allSample = { ...SAMPLE, ...AI_STOCK_SAMPLE };
+  const base = allSample[ticker]?.price ?? 100;
+  const ytd  = (allSample[ticker]?.ytd ?? 5) / 100;
   const days  = { '1M':22, '3M':66, '6M':130, '1Y':252 }[period];
   const trend = ytd / 252;
   const prices = [];
@@ -1191,26 +1300,23 @@ function buildLabels(n) {
   return labels;
 }
 
-async function renderPerfChart(period) {
+// 캐시된 데이터로 차트만 다시 그리기
+function renderPerfChartFromCache(period) {
+  const activeItems = ALL_CHART_ITEMS.filter(i => i.on);
   const datasets = [];
   let maxLen = 0;
 
-  for (let i = 0; i < CHART_TICKERS.length; i++) {
-    const ticker = CHART_TICKERS[i];
-    let closes;
-    try {
-      const hist = await fetchHistory(ticker, period);
-      closes = hist.closes.filter(c => c != null);
-    } catch {
-      closes = generateFallbackHistory(period, ticker);
-    }
+  for (const item of activeItems) {
+    const key = getCacheKey(item.ticker, period);
+    const closes = historyCache[key];
+    if (!closes || closes.length === 0) continue;
     if (closes.length > maxLen) maxLen = closes.length;
     const base = closes[0];
-    const indexed = closes.map(c => +((c/base*100).toFixed(2)));
+    const indexed = closes.map(c => +((c / base * 100).toFixed(2)));
     datasets.push({
-      label: ticker,
+      label: item.ticker,
       data: indexed,
-      borderColor: CHART_COLORS[i],
+      borderColor: item.color,
       backgroundColor: 'transparent',
       borderWidth: 2,
       pointRadius: 0,
@@ -1219,7 +1325,6 @@ async function renderPerfChart(period) {
   }
 
   const labels = buildLabels(maxLen);
-
   if (perfChart) perfChart.destroy();
   const ctx = document.getElementById('perfChart').getContext('2d');
   perfChart = new Chart(ctx, {
@@ -1227,7 +1332,7 @@ async function renderPerfChart(period) {
     data: { labels, datasets },
     options: {
       responsive: true, maintainAspectRatio: false,
-      animation: { duration: 400 },
+      animation: { duration: 250 },
       plugins: {
         legend: { labels: { color:'#7d8590', font:{ family:'Space Mono', size:10 }, boxWidth:12 } },
         tooltip: {
@@ -1242,6 +1347,24 @@ async function renderPerfChart(period) {
       }
     }
   });
+}
+
+// 전체 히스토리 fetch + 캐시 저장 후 차트 렌더
+async function renderPerfChart(period) {
+  // 아직 캐시 없는 종목만 fetch
+  await Promise.allSettled(
+    ALL_CHART_ITEMS.map(async item => {
+      const key = getCacheKey(item.ticker, period);
+      if (historyCache[key]) return; // 이미 캐시 있으면 스킵
+      try {
+        const hist = await fetchHistory(item.ticker, period);
+        historyCache[key] = hist.closes.filter(c => c != null);
+      } catch {
+        historyCache[key] = generateFallbackHistory(period, item.ticker);
+      }
+    })
+  );
+  renderPerfChartFromCache(period);
 }
 
 // ──────────────────────────────
@@ -1354,6 +1477,7 @@ async function loadAll() {
 }
 
 // Init
+buildToggleUI();
 loadAll();
 // Auto-refresh every 60s
 setInterval(loadAll, 60000);
